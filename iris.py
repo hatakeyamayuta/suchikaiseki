@@ -14,7 +14,6 @@ def create_model():
     relu = Dense(4, activation="relu",name="relu")(imput)
     sigmoid = Dense(2, activation="sigmoid",name="sigmoid")(relu)
     prediction = Dense(3,activation="softmax",name="softmax")(sigmoid)
-
     model = Model(inputs=imput,outputs=prediction)
     model.compile(loss="binary_crossentropy",
                   optimizer="nadam",
@@ -40,6 +39,15 @@ def predict():
     model = create_model()
     model.fit(X_train,y_train,validation_data=(X_test,y_test),
             batch_size=4, epochs=100)
+    
+    result = model.predict(X)
+    score = np.zeros((3,3))
+    for i,n in enumerate(result):
+        if np.argmax(n)==y[i]:
+            acc = acc + 1
+        score[y[i],np.argmax(n)] +=1
+    print(score)
+    print(acc/150) 
 
 
 def main():
